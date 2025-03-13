@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本地视频播放器</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>视频播放器</h2>
+            </div>
+            <div class="menu-list">
+                <a href="#" class="menu-item active" data-page="home">
+                    <span class="menu-icon">🏠</span>
+                    首页
+                </a>
+                <a href="#" class="menu-item" data-page="category">
+                    <span class="menu-icon">🏷️</span>
+                    分类
+                </a>
+                <a href="#" class="menu-item" data-page="recommend">
+                    <span class="menu-icon">⭐</span>
+                    推荐
+                </a>
+                <a href="#" class="menu-item" data-page="settings">
+                    <span class="menu-icon">⚙️</span>
+                    设置
+                </a>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- 首页内容 -->
+            <div class="page-content" id="home-page">
+                <div class="header">
+                    <h1>首页推荐</h1>
+                </div>
+                <div class="video-grid">
+                    {% for video in videos %}
+                    <div class="video-card" onclick="playVideo('{{ video.path }}', '{{ video.name }}')">
+                        <div class="video-preview">
+                            <video src="{{ video.path }}" preload="metadata"></video>
+                            <div class="play-button">▶</div>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">{{ video.name }}</h3>
+                            <div class="video-tags">
+                                {% for tag in video.tags %}
+                                <span class="tag">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- 分类页面 -->
+            <div class="page-content hidden" id="category-page">
+                <div class="header">
+                    <h1>视频分类</h1>
+                </div>
+                <div class="category-container">
+                    <div class="category-list">
+                        <h2>标签列表</h2>
+                        <div class="tags">
+                            {% for tag in all_tags %}
+                            <span class="tag clickable" onclick="filterByTag('{{ tag }}')">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="filtered-videos">
+                        <div class="video-grid" id="filtered-video-grid">
+                            <!-- 视频将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 推荐页面 -->
+            <div class="page-content hidden" id="recommend-page">
+                <div class="header">
+                    <h1>推荐视频</h1>
+                </div>
+                <div class="coming-soon">
+                    <h2>敬请期待</h2>
+                    <p>推荐功能正在开发中...</p>
+                </div>
+            </div>
+
+            <!-- 设置页面 -->
+            <div class="page-content hidden" id="settings-page">
+                <div class="header">
+                    <h1>系统设置</h1>
+                </div>
+                <div class="settings-container">
+                    <div class="config-section">
+                        <h3>视频目录配置</h3>
+                        <div id="videoPaths">
+                            {% for path in config.video_paths %}
+                            <div class="path-item">
+                                <input type="text" value="{{ path }}" class="path-input">
+                                <button class="remove-path">删除</button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <button id="addPath" class="add-button">添加目录</button>
+                    </div>
+                    
+                    <div class="config-section">
+                        <h3>视频格式配置</h3>
+                        <div id="videoExtensions">
+                            {% for ext in config.video_extensions %}
+                            <div class="extension-item">
+                                <input type="text" value="{{ ext }}" class="extension-input">
+                                <button class="remove-extension">删除</button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <button id="addExtension" class="add-button">添加格式</button>
+                    </div>
+                    
+                    <div class="config-section">
+                        <h3>播放设置</h3>
+                        <div class="setting-item">
+                            <label for="hoverPlayDelay">悬浮播放延迟（秒）：</label>
+                            <input type="number" id="hoverPlayDelay" min="0" step="0.5" value="{{ config.hover_play_delay }}" class="number-input">
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button id="saveConfig" class="save-button">保存配置</button>
+                        <button id="refreshList" class="refresh-button">刷新列表</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 视频播放弹窗 -->
+        <div class="video-modal hidden" id="videoModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalVideoTitle"></h2>
+                    <button class="close-modal">×</button>
+                </div>
+                <div class="modal-body">
+                    <video id="videoPlayer" controls controlsList="nodownload" oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
+                        您的浏览器不支持 HTML5 视频播放。
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/player.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/config.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html> 

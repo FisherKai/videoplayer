@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  video-player:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./videos:/videos
+      - ./config.json:/app/config.json
+      - ./config.py:/app/config.py
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=production
+    restart: unless-stopped 

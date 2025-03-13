@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频播放器配置</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>视频播放器配置</h1>
+        <div class="config-container">
+            <div class="config-section">
+                <h2>视频目录配置</h2>
+                <div id="videoPaths">
+                    {% for path in config.video_paths %}
+                    <div class="path-item">
+                        <input type="text" value="{{ path }}" class="path-input">
+                        <button class="remove-path">删除</button>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button id="addPath" class="add-button">添加目录</button>
+            </div>
+            
+            <div class="config-section">
+                <h2>视频格式配置</h2>
+                <div id="videoExtensions">
+                    {% for ext in config.video_extensions %}
+                    <div class="extension-item">
+                        <input type="text" value="{{ ext }}" class="extension-input">
+                        <button class="remove-extension">删除</button>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button id="addExtension" class="add-button">添加格式</button>
+            </div>
+            
+            <div class="button-group">
+                <button id="saveConfig" class="save-button">保存配置</button>
+                <a href="/" class="back-button">返回主页</a>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/config.js') }}"></script>
+</body>
+</html> 
