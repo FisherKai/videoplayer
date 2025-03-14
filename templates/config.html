@@ -108,17 +108,87 @@
 .remove-source:hover {
     color: #c0392b;
 }
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.tag-item {
+    background: #e3f2fd;
+    color: #3498db;
+    padding: 4px 12px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tag-item .remove-tag {
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-item-input {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.add-item-input input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.add-item-input button {
+    padding: 8px 15px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-item-input button:hover {
+    background: #2980b9;
+}
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="config-container">
-    <!-- 悬停播放设置 -->
+    <!-- 通用设置 -->
     <div class="config-section">
         <h2>通用设置</h2>
         <div class="form-group">
             <label for="hoverDelay">悬停播放延迟（秒）：</label>
             <input type="number" id="hoverDelay" value="2" min="0" step="0.1">
+        </div>
+    </div>
+
+    <!-- 视频路径设置 -->
+    <div class="config-section">
+        <h2>视频路径</h2>
+        <div id="videoPaths" class="tag-list"></div>
+        <div class="add-item-input">
+            <input type="text" id="newPath" placeholder="输入视频路径">
+            <button type="button" id="addPath">添加</button>
+        </div>
+    </div>
+
+    <!-- 视频格式设置 -->
+    <div class="config-section">
+        <h2>支持的视频格式</h2>
+        <div id="videoExtensions" class="tag-list"></div>
+        <div class="add-item-input">
+            <input type="text" id="newExtension" placeholder="输入视频格式（如：.mp4）">
+            <button type="button" id="addExtension">添加</button>
         </div>
     </div>
 
