@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}本地视频播放器{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-play-circle"></i>
+                <h2>视频播放器</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li {% if request.endpoint == 'index' and not request.args %}class="active"{% endif %}>
+                    <a href="{{ url_for('index') }}"><i class="fas fa-home"></i>首页</a>
+                </li>
+                <li {% if request.endpoint == 'index' and request.args.get('page') == 'category' %}class="active"{% endif %}>
+                    <a href="{{ url_for('index') }}#category"><i class="fas fa-folder-open"></i>分类</a>
+                </li>
+                <li {% if request.endpoint == 'index' and request.args.get('page') == 'recommend' %}class="active"{% endif %}>
+                    <a href="{{ url_for('index') }}#recommend"><i class="fas fa-star"></i>推荐</a>
+                </li>
+                <li {% if request.endpoint == 'config_page' %}class="active"{% endif %}>
+                    <a href="{{ url_for('config_page') }}"><i class="fas fa-sliders-h"></i>设置</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

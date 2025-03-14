@@ -62,11 +62,32 @@ def get_all_tags():
 
 @app.route('/')
 def index():
-    """渲染主页"""
-    videos = get_video_files()
-    config = load_config()
-    all_tags = get_all_tags()
-    return render_template('index.html', videos=videos, config=config, all_tags=all_tags)
+    try:
+        # 获取所有视频文件
+        videos = get_video_files()
+        
+        # 按目录分组视频
+        video_groups = {}
+        for video in videos:
+            directory = video.get('directory', '未分类')
+            if directory not in video_groups:
+                video_groups[directory] = []
+            video_groups[directory].append(video)
+        
+        # 获取所有标签
+        all_tags = set()
+        for video in videos:
+            all_tags.update(video.get('tags', []))
+        
+        return render_template('index.html', 
+                             video_groups=video_groups,
+                             all_tags=sorted(all_tags))
+    except Exception as e:
+        print(f"Error loading index page: {str(e)}")
+        # 发生错误时返回空数据
+        return render_template('index.html', 
+                             video_groups={},
+                             all_tags=[])
 
 @app.route('/config')
 def config_page():
